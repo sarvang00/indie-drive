@@ -1,5 +1,123 @@
-{% extends 'base.html' %} 
+{% extends 'base.html' %}
 
 {% block content %}
-File *i
+<section id="showcase-inner" class="py-5 text-white">
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-md-12">
+                <h1 class="display-4">File Name</h1>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- file -->
+<section id="file" class="py-4">
+    <div class="container">
+        <a href="files.html" class="btn btn-light mb-4">Back To files</a>
+        <div class="row">
+            <div class="col-md-9">
+                <!-- Home Main Image -->
+                <img src="assets/img/homes/home-1.jpg" alt="" class="img-main img-fluid mb-3">
+                <!-- Thumbnails -->
+                <div class="row mb-5 thumbs">
+                    <div class="col-md-2">
+                        <a href="assets/img/homes/home-inside-1.jpg" data-lightbox="home-images">
+                            <img src="assets/img/homes/home-inside-1.jpg" alt="" class="img-fluid">
+                        </a>
+                    </div>
+                    <div class="col-md-2">
+                        <a href="assets/img/homes/home-inside-2.jpg" data-lightbox="home-images">
+                            <img src="assets/img/homes/home-inside-2.jpg" alt="" class="img-fluid">
+                        </a>
+                    </div>
+                    <div class="col-md-2">
+                        <a href="assets/img/homes/home-inside-3.jpg" data-lightbox="home-images">
+                            <img src="assets/img/homes/home-inside-3.jpg" alt="" class="img-fluid">
+                        </a>
+                    </div>
+                    <div class="col-md-2">
+                        <a href="assets/img/homes/home-inside-4.jpg" data-lightbox="home-images">
+                            <img src="assets/img/homes/home-inside-4.jpg" alt="" class="img-fluid">
+                        </a>
+                    </div>
+                    <div class="col-md-2">
+                        <a href="assets/img/homes/home-inside-5.jpg" data-lightbox="home-images">
+                            <img src="assets/img/homes/home-inside-5.jpg" alt="" class="img-fluid">
+                        </a>
+                    </div>
+                    <div class="col-md-2">
+                        <a href="assets/img/homes/home-inside-6.jpg" data-lightbox="home-images">
+                            <img src="assets/img/homes/home-inside-6.jpg" alt="" class="img-fluid">
+                        </a>
+                    </div>
+                </div>
+                <!-- Fields -->
+                <div class="row mb-5 fields">
+                    <div class="col-md-6">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item text-secondary">
+                                <i class="fas fa-th-large"></i> File Size:
+                                <span class="float-right">3200</span>
+                            </li>
+                            <li class="list-group-item text-secondary">
+                                <i class="fas fa-calendar"></i> Upload Date:
+                                <span class="float-right">8/30/2018</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item text-secondary">
+                                <i class="fas fa-square"></i> Sharing Status:
+                                <span class="float-right">Public
+                                </span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <button class="btn-info btn-block btn-lg">Download file</button>
+                <button class="btn-primary btn-block btn-lg" data-toggle="modal" data-target="#shareFileModal">Share the
+                    file</button>
+                <button class="btn-danger btn-block btn-lg">Delete the file</button>
+                <button class="btn-block btn-block btn-lg">Make Public</button>
+                <button class="btn-warning btn-block btn-lg">Stop All Sharing</button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Share File Modal -->
+<div class="modal fade" id="shareFileModal" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="shareFileModalLabel">Share a file</h5>
+                <button type="button" class="close" data-dismiss="modal">
+                    <span>&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="property_name" class="col-form-label">File:</label>
+                        <input type="text" name="file" class="form-control" value="45 Drivewood Cirlce" disabled>
+                    </div>
+                    <div class="form-group">
+                        <label for="email" class="col-form-label">Email:</label>
+                        <input type="email" name="email" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="message" class="col-form-label">Message:</label>
+                        <textarea name="message" class="form-control"></textarea>
+                    </div>
+                    <hr>
+                    <input type="submit" value="Send" class="btn btn-block btn-secondary">
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
