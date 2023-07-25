@@ -10,7 +10,8 @@ from files.models import File
 @login_required(login_url='/users/login/')
 def index(request):
     # TODO: Filter files for the owner
-    files = File.objects.order_by('-upload_date')
+    files = File.objects.all().filter(owner=request.user.id).order_by('-upload_date')
+
     paginator = Paginator(files, 6)
     page = request.GET.get('page')
     paged_files = paginator.get_page(page)
