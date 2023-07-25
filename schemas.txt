@@ -1,0 +1,24 @@
+Model/DB Fields
+
+## Files
+id: INT
+owner: INT (FOREIGN KEY [user])
+filename: STR
+s3Uri:STR
+is_public: BOOL [false] (If it can be publically used; does not matter; not seen in others by default)
+upload_date: DATE
+
+##  User
+id: INT
+name: STR
+email: STR
+phone: STR
+password: STR
+
+## shared_files
+{
+    "user": string,
+    "filesShared": [
+        {"fileId1", "fileId2"}
+    ]
+}
