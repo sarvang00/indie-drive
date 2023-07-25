@@ -50,9 +50,6 @@ def register(request):
                 else:
                     user = User.objects.create_user(username=username, password=password, email=email, first_name=first_name, last_name=last_name)
                     user.save()
-                    group = Group.objects.get(name='Advocates')
-                    user.groups.add(group)
-                    user.save()
                     messages.success(request, 'You are now registered and can log in')
                     return redirect('login')
         else:
@@ -63,10 +60,14 @@ def register(request):
         return render(request,'users/register.html')
 
 @cache_control(no_cache=True, must_revalidate=True)
-# @login_required(login_url='/users/login/')
+@login_required(login_url='/users/login/')
 def logout(request):
     if request.method == 'POST':
         auth.logout(request)
         messages.success(request, 'You are now logged out')
         return redirect('login')
 
+@cache_control(no_cache=True, must_revalidate=True)
+@login_required(login_url='/users/login/')
+def dashboard(request):
+    return redirect('index')
