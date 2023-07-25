@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 
+{% load humanize %}
+
 {% block content %}
 
 <section id="showcase-inner" class="py-5 text-white">
@@ -18,207 +20,84 @@
   <div class="container">
     <div class="row">
 
-      <!-- file 1 -->
+      {% if files %}
+        {% for file in files %}
+          <!-- file -->
       <div class="col-md-6 col-lg-4 mb-4">
         <div class="card file-preview">
           <div class="card-body">
             <div class="file-heading text-center">
-              <h4 class="text-primary">45 Drivewood Circle</h4>
+              <h4 class="text-primary">{{file.name}}</h4>
             </div>
             <hr>
             <div class="row py-2 text-secondary">
-              <div class="col-6">
+              <div class="col-md-6 col-sm-12">
+                <!-- TODO: Replace from S3 Service or Remove -->
                 <i class="fas fa-th-large"></i> File size: 3200
               </div>
+              <div class="col-md-6 col-sm-12">
+                <i class="fas fa-clock"></i> {{ file.upload_date | timesince }}
+              </div>
             </div>
             <hr>
             <div class="row py-2 text-secondary">
               <div class="col-12">
-                <i class="fas fa-user"></i> Public
-              </div>
-            </div>
-            <div class="row text-secondary pb-2">
-              <div class="col-12">
-                <i class="fas fa-clock"></i> 2 days ago
+                {% if file.is_public %}
+                <p class="text-info"><i class="fas fa-user"></i> Public</p>
+                {% else %}
+                <p class="text-primary"><i class="fas fa-user"></i> Private</p>
+                {% endif %}
               </div>
             </div>
             <hr>
-            <a href="file.html" class="btn btn-primary btn-block">More Info</a>
+            <a href="{% url 'myfile' file.id %}" class="btn btn-primary btn-block">More Info</a>
           </div>
         </div>
       </div>
-
-      <!-- file 2 -->
-      <div class="col-md-6 col-lg-4 mb-4">
-        <div class="card file-preview">
-          <div class="card-body">
-            <div class="file-heading text-center">
-              <h4 class="text-primary">45 Drivewood Circle</h4>
-            </div>
-            <hr>
-            <div class="row py-2 text-secondary">
-              <div class="col-6">
-                <i class="fas fa-th-large"></i> File size: 3200
-              </div>
-            </div>
-            <hr>
-            <div class="row py-2 text-secondary">
-              <div class="col-12">
-                <i class="fas fa-user"></i> Public
-              </div>
-            </div>
-            <div class="row text-secondary pb-2">
-              <div class="col-12">
-                <i class="fas fa-clock"></i> 2 days ago
-              </div>
-            </div>
-            <hr>
-            <a href="file.html" class="btn btn-primary btn-block">More Info</a>
-          </div>
+        {% endfor %}  
+      {% else %}
+        <div class="col-md-12">
+          <p>No files uploaded yet</p>
         </div>
-      </div>
-
-      <!-- file 3 -->
-      <div class="col-md-6 col-lg-4 mb-4">
-        <div class="card file-preview">
-          <div class="card-body">
-            <div class="file-heading text-center">
-              <h4 class="text-primary">45 Drivewood Circle</h4>
-            </div>
-            <hr>
-            <div class="row py-2 text-secondary">
-              <div class="col-6">
-                <i class="fas fa-th-large"></i> File size: 3200
-              </div>
-            </div>
-            <hr>
-            <div class="row py-2 text-secondary">
-              <div class="col-12">
-                <i class="fas fa-user"></i> Public
-              </div>
-            </div>
-            <div class="row text-secondary pb-2">
-              <div class="col-12">
-                <i class="fas fa-clock"></i> 2 days ago
-              </div>
-            </div>
-            <hr>
-            <a href="file.html" class="btn btn-primary btn-block">More Info</a>
-          </div>
-        </div>
-      </div>
-
-      <!-- file 4 -->
-      <div class="col-md-6 col-lg-4 mb-4">
-        <div class="card file-preview">
-          <div class="card-body">
-            <div class="file-heading text-center">
-              <h4 class="text-primary">45 Drivewood Circle</h4>
-            </div>
-            <hr>
-            <div class="row py-2 text-secondary">
-              <div class="col-6">
-                <i class="fas fa-th-large"></i> File size: 3200
-              </div>
-            </div>
-            <hr>
-            <div class="row py-2 text-secondary">
-              <div class="col-12">
-                <i class="fas fa-user"></i> Public
-              </div>
-            </div>
-            <div class="row text-secondary pb-2">
-              <div class="col-12">
-                <i class="fas fa-clock"></i> 2 days ago
-              </div>
-            </div>
-            <hr>
-            <a href="file.html" class="btn btn-primary btn-block">More Info</a>
-          </div>
-        </div>
-      </div>
-
-      <!-- file 5 -->
-      <div class="col-md-6 col-lg-4 mb-4">
-        <div class="card file-preview">
-          <div class="card-body">
-            <div class="file-heading text-center">
-              <h4 class="text-primary">45 Drivewood Circle</h4>
-            </div>
-            <hr>
-            <div class="row py-2 text-secondary">
-              <div class="col-6">
-                <i class="fas fa-th-large"></i> File size: 3200
-              </div>
-            </div>
-            <hr>
-            <div class="row py-2 text-secondary">
-              <div class="col-12">
-                <i class="fas fa-user"></i> Public
-              </div>
-            </div>
-            <div class="row text-secondary pb-2">
-              <div class="col-12">
-                <i class="fas fa-clock"></i> 2 days ago
-              </div>
-            </div>
-            <hr>
-            <a href="file.html" class="btn btn-primary btn-block">More Info</a>
-          </div>
-        </div>
-      </div>
-
-      <!-- file 6 -->
-      <div class="col-md-6 col-lg-4 mb-4">
-        <div class="card file-preview">
-          <div class="card-body">
-            <div class="file-heading text-center">
-              <h4 class="text-primary">45 Drivewood Circle</h4>
-            </div>
-            <hr>
-            <div class="row py-2 text-secondary">
-              <div class="col-6">
-                <i class="fas fa-th-large"></i> File size: 3200
-              </div>
-            </div>
-            <hr>
-            <div class="row py-2 text-secondary">
-              <div class="col-12">
-                <i class="fas fa-user"></i> Public
-              </div>
-            </div>
-            <div class="row text-secondary pb-2">
-              <div class="col-12">
-                <i class="fas fa-clock"></i> 2 days ago
-              </div>
-            </div>
-            <hr>
-            <a href="file.html" class="btn btn-primary btn-block">More Info</a>
-          </div>
-        </div>
-      </div>
+      {% endif %}
 
     </div>
 
     <div class="row">
       <div class="col-md-12">
+        {% if files.has_other_pages %}
         <ul class="pagination">
+          {% if files.has_previous %}
+          <li class="page-item">
+            <a class="page-link" href="?page={{files.previous_page_number}}">&laquo;</a>
+          </li>
+          {% else %}
           <li class="page-item disabled">
             <a class="page-link" href="#">&laquo;</a>
           </li>
+          {% endif %}
+          {% for pg in files.paginator.page_range %}
+          {% if files.number == pg %}
           <li class="page-item active">
-            <a class="page-link" href="#">1</a>
+            <a class="page-link">{{pg}}</a>
           </li>
+          {% else %}
           <li class="page-item">
-            <a class="page-link" href="#">2</a>
+            <a class="page-link" href="?page={{pg}}">{{pg}}</a>
           </li>
+          {% endif %}
+          {% endfor %}
+          {% if files.has_next %}
           <li class="page-item">
-            <a class="page-link" href="#">3</a>
+            <a class="page-link" href="?page={{files.next_page_number}}">&raquo;</a>
           </li>
-          <li class="page-item">
-            <a class="page-link" href="#">&raquo;</a>
+          {% else %}
+          <li class="page-item disabled">
+            <a class="page-link">&raquo;</a>
           </li>
+          {% endif %}
         </ul>
+        {% endif %}
       </div>
     </div>
   </div>

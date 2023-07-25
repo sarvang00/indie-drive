@@ -1,11 +1,13 @@
 {% extends 'base.html' %}
 
+{% load humanize %}
+
 {% block content %}
 <section id="showcase-inner" class="py-5 text-white">
     <div class="container">
         <div class="row text-center">
             <div class="col-md-12">
-                <h1 class="display-4">File Name</h1>
+                <h1 class="display-4">{{file.name}}</h1>
             </div>
         </div>
     </div>
@@ -14,7 +16,7 @@
 <!-- file -->
 <section id="file" class="py-4">
     <div class="container">
-        <a href="files.html" class="btn btn-light mb-4">Back To files</a>
+        <a href="{% url 'myfiles' %}" class="btn btn-light mb-4">Back To files</a>
         <div class="row">
             <div class="col-md-9">
                 <!-- Home Main Image -->
@@ -58,19 +60,34 @@
                         <ul class="list-group list-group-flush">
                             <li class="list-group-item text-secondary">
                                 <i class="fas fa-th-large"></i> File Size:
-                                <span class="float-right">3200</span>
+                                <!-- TODO: Make this dynamic -->
+                                <span class="float-right">3200 Static</span>
                             </li>
                             <li class="list-group-item text-secondary">
-                                <i class="fas fa-calendar"></i> Upload Date:
-                                <span class="float-right">8/30/2018</span>
+                                <i class="fas fa-calendar"></i> Upload Time:
+                                <span class="float-right">{{file.upload_date | naturaltime }}</span>
                             </li>
                         </ul>
                     </div>
                     <div class="col-md-6">
                         <ul class="list-group list-group-flush">
+                            {% if file.is_public %}
                             <li class="list-group-item text-secondary">
-                                <i class="fas fa-square"></i> Sharing Status:
+                                <i class="fas fa-user"></i> Access:
                                 <span class="float-right">Public
+                                </span>
+                            </li>
+                            {% else %}
+                            <li class="list-group-item text-secondary">
+                                <i class="fas fa-user"></i> Access:
+                                <span class="float-right">Private
+                                </span>
+                            </li>
+                            {% endif %}
+                            <li class="list-group-item text-secondary">
+                                <i class="fas fa-square"></i> Shared With Static:
+                                <span class="float-right">
+                                    Person-1, Person-2
                                 </span>
                             </li>
                         </ul>
@@ -78,12 +95,16 @@
                 </div>
             </div>
             <div class="col-md-3">
-                <button class="btn-info btn-block btn-lg">Download file</button>
-                <button class="btn-primary btn-block btn-lg" data-toggle="modal" data-target="#shareFileModal">Share the
-                    file</button>
-                <button class="btn-danger btn-block btn-lg">Delete the file</button>
-                <button class="btn-block btn-block btn-lg">Make Public</button>
-                <button class="btn-warning btn-block btn-lg">Stop All Sharing</button>
+                <a class="text-center btn-info btn-block btn-lg" href="{{file.s3Uri}}" target="_blank">Download file</a>
+                <a class="text-center text-white btn-primary btn-block btn-lg" data-toggle="modal" data-target="#shareFileModal">Static Share the
+                    file</a>
+                <a class="text-center btn-danger btn-block btn-lg" href="#" target="_blank">Static Delete the file</a>
+                {% if file.is_public %}
+                <a class="text-center btn-block btn-block btn-lg border border-dark" href="#" target="_blank">Make Private Static</a>
+                {% else %}
+                <a class="text-center btn-block btn-block btn-lg border border-dark" href="#" target="_blank">Make Public Static</a>
+                {% endif %}
+                <a class="text-center btn-warning btn-block btn-lg" href="#" target="_blank">Stop All Sharing Static</a>
             </div>
         </div>
     </div>
@@ -103,10 +124,10 @@
                 <form>
                     <div class="form-group">
                         <label for="property_name" class="col-form-label">File:</label>
-                        <input type="text" name="file" class="form-control" value="45 Drivewood Cirlce" disabled>
+                        <input type="text" name="file" class="form-control" value="{{file.name}}" disabled>
                     </div>
                     <div class="form-group">
-                        <label for="email" class="col-form-label">Email:</label>
+                        <label for="email" class="col-form-label">Email (share with):</label>
                         <input type="email" name="email" class="form-control" required>
                     </div>
                     <div class="form-group">

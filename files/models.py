@@ -1,12 +1,14 @@
 from django.db import models
+from django.conf import settings
+
 from datetime import datetime
-# from accounts.models import User
 
 class File(models.Model):
-    # owner = models.ForeignKey(User)
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     name = models.CharField(max_length=200)
     s3Uri = models.URLField(blank=True)
     is_public = models.BooleanField(default=False)
     upload_date = models.DateTimeField(default=datetime.now)
+    shared_with_users = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name="owner")
     def __str__(self):
         return self.name
