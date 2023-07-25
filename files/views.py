@@ -17,7 +17,7 @@ def index(request):
     shared_files = list()
 
     for file_info in shared_files_list:
-        shared_files.append(File.objects.get(pk=file_info.id))
+        shared_files.append(File.objects.get(pk=file_info.file_id))
 
     context = {
         'files': files,
