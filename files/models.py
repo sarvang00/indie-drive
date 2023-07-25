@@ -9,6 +9,6 @@ class File(models.Model):
     s3Uri = models.URLField(blank=True)
     is_public = models.BooleanField(default=False)
     upload_date = models.DateTimeField(default=datetime.now)
-    shared_with_users = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name="owner")
+    shared = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name="shared")
     def __str__(self):
         return self.name

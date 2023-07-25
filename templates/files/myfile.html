@@ -5,6 +5,11 @@
 {% block title %} | File Detail {% endblock %}
 
 {% block content %}
+
+{% if not user.id == file.owner.id and not file.is_public and user not in shared %}
+<!-- Not Owner; Private; Not Shared -->
+<h2>You are not authorized to access this file!! Please request the file owner for access.</h2>
+{% else %}
 <section id="showcase-inner" class="py-5 text-white">
     <div class="container">
         <div class="row text-center">
@@ -15,47 +20,11 @@
     </div>
 </section>
 
-<!-- file -->
 <section id="file" class="py-4">
     <div class="container">
         <a href="{% url 'myfiles' %}" class="btn btn-light mb-4">Back To files</a>
         <div class="row">
             <div class="col-md-9">
-                <!-- Home Main Image -->
-                <img src="assets/img/homes/home-1.jpg" alt="" class="img-main img-fluid mb-3">
-                <!-- Thumbnails -->
-                <div class="row mb-5 thumbs">
-                    <div class="col-md-2">
-                        <a href="assets/img/homes/home-inside-1.jpg" data-lightbox="home-images">
-                            <img src="assets/img/homes/home-inside-1.jpg" alt="" class="img-fluid">
-                        </a>
-                    </div>
-                    <div class="col-md-2">
-                        <a href="assets/img/homes/home-inside-2.jpg" data-lightbox="home-images">
-                            <img src="assets/img/homes/home-inside-2.jpg" alt="" class="img-fluid">
-                        </a>
-                    </div>
-                    <div class="col-md-2">
-                        <a href="assets/img/homes/home-inside-3.jpg" data-lightbox="home-images">
-                            <img src="assets/img/homes/home-inside-3.jpg" alt="" class="img-fluid">
-                        </a>
-                    </div>
-                    <div class="col-md-2">
-                        <a href="assets/img/homes/home-inside-4.jpg" data-lightbox="home-images">
-                            <img src="assets/img/homes/home-inside-4.jpg" alt="" class="img-fluid">
-                        </a>
-                    </div>
-                    <div class="col-md-2">
-                        <a href="assets/img/homes/home-inside-5.jpg" data-lightbox="home-images">
-                            <img src="assets/img/homes/home-inside-5.jpg" alt="" class="img-fluid">
-                        </a>
-                    </div>
-                    <div class="col-md-2">
-                        <a href="assets/img/homes/home-inside-6.jpg" data-lightbox="home-images">
-                            <img src="assets/img/homes/home-inside-6.jpg" alt="" class="img-fluid">
-                        </a>
-                    </div>
-                </div>
                 <!-- Fields -->
                 <div class="row mb-5 fields">
                     <div class="col-md-6">
@@ -87,10 +56,16 @@
                             </li>
                             {% endif %}
                             <li class="list-group-item text-secondary">
-                                <i class="fas fa-square"></i> Shared With Static:
-                                <span class="float-right">
-                                    Person-1, Person-2
-                                </span>
+                                <i class="fas fa-square"></i> Shared With:
+                                <ul class="float-right">
+                                    {% if shared %}
+                                    {% for shUser in shared %}
+                                    <li>{{shUser.first_name}} {{shUser.last_name}}</li>
+                                    {% endfor %}
+                                    {% else %}
+                                    None
+                                    {% endif %}
+                                </ul>
                             </li>
                         </ul>
                     </div>
@@ -98,15 +73,25 @@
             </div>
             <div class="col-md-3">
                 <a class="text-center btn-info btn-block btn-lg" href="{{file.s3Uri}}" target="_blank">Download file</a>
-                <a class="text-center text-white btn-primary btn-block btn-lg" data-toggle="modal" data-target="#shareFileModal">Static Share the
-                    file</a>
+                {% if user.id == file.owner.id %}
+                <a class="text-center text-white btn-primary btn-block btn-lg" data-toggle="modal"
+                    data-target="#shareFileModal">Share the file</a>
                 <a class="text-center btn-danger btn-block btn-lg" href="#" target="_blank">Static Delete the file</a>
                 {% if file.is_public %}
-                <a class="text-center btn-block btn-block btn-lg border border-dark" href="#" target="_blank">Make Private Static</a>
+                <a class="text-center btn-block btn-lg border border-dark" href="#" target="_blank">Make
+                    Private Static</a>
                 {% else %}
-                <a class="text-center btn-block btn-block btn-lg border border-dark" href="#" target="_blank">Make Public Static</a>
+                <a class="text-center btn-block btn-lg border border-dark" href="#" target="_blank">Make
+                    Public Static</a>
                 {% endif %}
-                <a class="text-center btn-warning btn-block btn-lg" href="#" target="_blank">Stop All Sharing Static</a>
+                {% if shared %}
+                    <form action="{% url 'stop_sharing' %}" id="stop_sharing" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <input type="hidden" id="file_id" name="file_id" value="{{file.id}}">
+                        <button type="submit" class="mt-2 btn-warning btn-block btn-lg">Stop all sharing Static</button>
+                    </form>
+                {% endif %}                
+                {% endif %}
             </div>
         </div>
     </div>
@@ -123,24 +108,30 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form>
+                <form action="{% url 'share_with_user' %}" id="share_with_user" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
                     <div class="form-group">
-                        <label for="property_name" class="col-form-label">File:</label>
-                        <input type="text" name="file" class="form-control" value="{{file.name}}" disabled>
+                        <label for="file_name" class="col-form-label">File:</label>
+                        <input type="text" id="file_name" name="file_name" class="form-control" value="{{file.name}}" disabled>
                     </div>
                     <div class="form-group">
-                        <label for="email" class="col-form-label">Email (share with):</label>
-                        <input type="email" name="email" class="form-control" required>
+                        <input type="hidden" id="file_id" name="file_id" value="{{file.id}}">
                     </div>
                     <div class="form-group">
-                        <label for="message" class="col-form-label">Message:</label>
-                        <textarea name="message" class="form-control"></textarea>
+                        <label for="receiver_email" class="col-form-label">Email (share with):</label>
+                        <input type="email" id="receiver_email" name="receiver_email" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="receiver_message" class="col-form-label">Message:</label>
+                        <textarea id="receiver_message" name="receiver_message" class="form-control"></textarea>
                     </div>
                     <hr>
-                    <input type="submit" value="Send" class="btn btn-block btn-secondary">
+                    <button type="submit" class="btn btn-block btn-secondary">Submit</button>
                 </form>
             </div>
         </div>
     </div>
 </div>
+{% endif%}
+
 {% endblock %}

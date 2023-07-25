@@ -20,20 +20,11 @@
         </li>        
         <li 
         {% if 'files' in request.path %} 
-          {% if 'shared' not in request.path %} 
-            class="nav-item active mr-3" 
-          {% endif %} 
+          class="nav-item active mr-3" 
         {% else %} 
           class="nav-item mr-3" 
         {% endif %}>
           <a class="nav-link" href="{% url 'myfiles' %}">My Files</a>
-        </li>
-        <li 
-        {% if 'shared' in request.path %} class="nav-item active mr-3" 
-        {% else %} class="nav-item mr-3" 
-        {% endif %}
-        >
-          <a class="nav-link" href="{% url 'sharedfiles' %}">Shared Files</a>
         </li>
         {% endif %}
         <li 
