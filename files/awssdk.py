@@ -2,7 +2,10 @@ import boto3
 
 class S3ClientObject:
     def __init__(self):
-        self.s3_client = boto3.client('s3', aws_access_key_id='ASIAWQ5I4PNMR7Q7FXK7', aws_secret_access_key='7L3kGyi89x5ogiBVKfTwFtkxW/5zUwM/5jw+oFrB', aws_session_token="FwoGZXIvYXdzELT//////////wEaDHf8cQUzPendu/4rESK9ARJ0+RgCsZH3HnN4tTngg7Y2OtFhl+peg3nBP9lk1pWqLQh4UvTRUJRqOLkSAZ/je+l8LLxPa5QCR+MgrYftkJzJm4Gtc+ACyNHRMJCDcA+kHmTCkYLyuF8AyxlaZxT+axsiBNMLngQsVAlEjGt/B3/wAPOh+yACNmSaaP5Tbpm8IFzZti9stwOL7lJe+YoQKXan4bjs4fG0W8pELL4q8AZTU9C04x8SrSiy6KpBf3WnvvQE22s+orhflEve9Si0gYKmBjItq2eWdM33y0B+8Z7ozjIvskk+2Lj3K6nn8A3ZMCxK6xsKdL9izRllRiSceZ4Y")
+        # Dev
+        # self.s3_client = boto3.client('s3', aws_access_key_id='#', aws_secret_access_key='#', aws_session_token="#")
+        # Deploy
+        self.s3_client = boto3.client('s3')
         self.defaultBucketName = "myawsbucketdalhousietest1"
 
     def upload_file_to_s3(self, file_path, s3_key, bucket_name=None, public_access=True):

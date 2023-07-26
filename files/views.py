@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User
+from django.http import HttpResponseServerError
 from django.shortcuts import get_object_or_404, render, redirect
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.contrib import messages
@@ -8,6 +9,8 @@ from django.views.decorators.cache import cache_control
 from files.models import File
 
 from files.awssdk import S3ClientObject
+
+import requests, json
 
 @cache_control(no_cache=True, must_revalidate=True)
 @login_required(login_url='/users/login/')
@@ -56,7 +59,33 @@ def share_with_user(request):
 
         file = File.objects.get(pk=file_id)
         file.shared.add(User.objects.get(email=receiver_email))
-        return redirect('myfiles')
+
+        # Prepare the data to be sent as JSON
+        data = {
+            'receiver_email': receiver_email,
+            'receiver_message': receiver_message
+        }
+
+        # Replace the URL with your API endpoint
+        api_url = 'https://mgv62yuw8f.execute-api.us-east-1.amazonaws.com/staging/'
+
+        try:
+            # Send the POST request with JSON data
+            response = requests.post(api_url, json=data)
+
+            # Check the response status code (optional)
+            if response.status_code == 200:
+                print("Email sent successfully!")
+            else:
+                print(f"Failed to send email. Status code: {response.status_code}")
+
+            return redirect('myfiles')
+
+        except requests.exceptions.RequestException as e:
+            print("Error sending the request:", e)
+
+            # Handle the error as required
+            return HttpResponseServerError("Failed to send the email.")
 
 @cache_control(no_cache=True, must_revalidate=True)
 @login_required(login_url='/users/login/')
