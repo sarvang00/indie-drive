@@ -1,16 +1,17 @@
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404, render, redirect
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
-
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.cache import cache_control
 
 from files.models import File
 
+from files.awssdk import S3ClientObject
+
 @cache_control(no_cache=True, must_revalidate=True)
 @login_required(login_url='/users/login/')
 def index(request):
-    # TODO: Filter files for the owner
     files = File.objects.all().filter(owner=request.user.id).order_by('-upload_date')
 
     shared_files_list = File.shared.through.objects.all().filter(user_id=request.user.id)
@@ -55,4 +56,54 @@ def share_with_user(request):
 
         file = File.objects.get(pk=file_id)
         file.shared.add(User.objects.get(email=receiver_email))
+        return redirect('myfiles')
+
+@cache_control(no_cache=True, must_revalidate=True)
+@login_required(login_url='/users/login/')
+def make_file_private(request):
+    if request.method == 'POST':
+        file_id = request.POST['file_id']
+        file = File.objects.get(pk=file_id)
+
+        status = S3ClientObject().set_public_access_to_false(file.name)
+        if status:
+            file.is_public = False
+            file.save()
+            messages.success(request, 'File access changed to private')
+        else:
+            messages.error(request, 'File access change failed')
+            
+        return redirect('myfiles')
+    
+@cache_control(no_cache=True, must_revalidate=True)
+@login_required(login_url='/users/login/')
+def make_file_public(request):
+    if request.method == 'POST':
+        file_id = request.POST['file_id']
+        file = File.objects.get(pk=file_id)
+
+        status = S3ClientObject().set_public_access_to_true(file.name)
+        if status:
+            file.is_public = True
+            file.save()
+            messages.success(request, 'File access changed to public')
+        else:
+            messages.error(request, 'File access change failed')
+            
+        return redirect('myfiles')
+    
+@cache_control(no_cache=True, must_revalidate=True)
+@login_required(login_url='/users/login/')
+def delete_file(request):
+    if request.method == 'POST':
+        file_id = request.POST['file_id']
+        file = File.objects.get(pk=file_id)
+
+        status = S3ClientObject().delete_file_from_s3(file.name)
+        if status:
+            file.delete()
+            messages.success(request, 'File deleted')
+        else:
+            messages.error(request, 'File deletion failed')
+            
         return redirect('myfiles')

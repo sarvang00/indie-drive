@@ -30,11 +30,6 @@
                     <div class="col-md-6">
                         <ul class="list-group list-group-flush">
                             <li class="list-group-item text-secondary">
-                                <i class="fas fa-th-large"></i> File Size:
-                                <!-- TODO: Make this dynamic -->
-                                <span class="float-right">3200 Static</span>
-                            </li>
-                            <li class="list-group-item text-secondary">
                                 <i class="fas fa-calendar"></i> Upload Time:
                                 <span class="float-right">{{file.upload_date | naturaltime }}</span>
                             </li>
@@ -76,19 +71,29 @@
                 {% if user.id == file.owner.id %}
                 <a class="text-center text-white btn-primary btn-block btn-lg" data-toggle="modal"
                     data-target="#shareFileModal">Share the file</a>
-                <a class="text-center btn-danger btn-block btn-lg" href="#" target="_blank">Static Delete the file</a>
+                <form action="{% url 'delete_file' %}" id="delete_file" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <input type="hidden" id="file_id" name="file_id" value="{{file.id}}">
+                    <button type="submit" class="mt-2 btn-danger btn-block btn-lg">Delete File</button>
+                </form>
                 {% if file.is_public %}
-                <a class="text-center btn-block btn-lg border border-dark" href="#" target="_blank">Make
-                    Private Static</a>
+                <form action="{% url 'make_file_private' %}" id="make_file_private" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <input type="hidden" id="file_id" name="file_id" value="{{file.id}}">
+                    <button type="submit" class="mt-2 btn-block btn-lg border border-dark">Make Private</button>
+                </form>
                 {% else %}
-                <a class="text-center btn-block btn-lg border border-dark" href="#" target="_blank">Make
-                    Public Static</a>
+                <form action="{% url 'make_file_public' %}" id="make_file_public" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <input type="hidden" id="file_id" name="file_id" value="{{file.id}}">
+                    <button type="submit" class="mt-2 btn-block btn-lg border border-dark">Make Public</button>
+                </form>
                 {% endif %}
                 {% if shared %}
                     <form action="{% url 'stop_sharing' %}" id="stop_sharing" method="post" enctype="multipart/form-data">
                         {% csrf_token %}
                         <input type="hidden" id="file_id" name="file_id" value="{{file.id}}">
-                        <button type="submit" class="mt-2 btn-warning btn-block btn-lg">Stop all sharing Static</button>
+                        <button type="submit" class="mt-2 btn-warning btn-block btn-lg">Stop all sharing</button>
                     </form>
                 {% endif %}                
                 {% endif %}

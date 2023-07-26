@@ -16,9 +16,10 @@
           Storing Files Just Got So Easy
         </h1>
         <div class="search">
-          <form action="upload.html">
+          <form action="{% url 'upload_file' %}" id="upload_file" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
             <div>
-              <input class="form-control form-control-lg" id="formFileLg" type="file">
+              <input class="form-control form-control-lg" id="file" type="file" name="file">
             </div>
             <button class="btn btn-secondary btn-block mt-4" type="submit">Upload File</button>
           </form>
