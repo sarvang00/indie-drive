@@ -22,15 +22,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-59&0loq09@p5$z9+)9hqwiz^=f0ugd=v(_y*ufb^r(xn&rfw-5'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = []
-
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -75,21 +66,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'indiedrive.wsgi.application'
-
-
-# Database
-# https://docs.djangoproject.com/en/4.2/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'indiedrive',
-        'USER': 'root',
-        'PASSWORD': 'MayPass@0523',
-        'HOST':'localhost',
-        'PORT':'3306',
-    }
-}
 
 
 # Password validation
@@ -145,3 +121,8 @@ MEDIA_URL = '/media/'
 MESSAGE_TAGS = {
     messages.ERROR: 'danger'
 }
+
+try:
+    from .local_settings import *
+except ImportError:
+    pass
