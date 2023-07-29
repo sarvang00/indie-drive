@@ -117,6 +117,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
+# To remove cross origin ref policy console error
+SECURE_CROSS_ORIGIN_OPENER_POLICY = None
+
 # Configuring messages
 MESSAGE_TAGS = {
     messages.ERROR: 'danger'
